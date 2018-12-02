@@ -49,7 +49,6 @@ int rechercher(char utilisateur[50], char nom_rdv[50])
             i++;
 
         } while (caractereActuel != EOF);
-        printf("%s", liste_rdv);
         positionRDV = strstr(liste_rdv, nom_rdv);
         if (positionRDV != NULL) {
             fichier2 = fopen(strcat(nom_rdv,".txt"), "r") ;
@@ -75,7 +74,13 @@ void consulter_Agenda()
     texte(utilisateur) ;
     fichier1 = fopen(strcat(utilisateur,".txt"), "r") ;
     if (fichier1 != NULL){
-        printf("Quel rdv voulez-vous consulter ? \n");
+        do
+        {
+            caractereActuel = fgetc(fichier1);
+            printf("%c", caractereActuel);
+        } while (caractereActuel != EOF);
+        caractereActuel = 0;
+        printf("\nQuel rdv voulez-vous consulter ?  ");
         texte(nom_rdv);
         if (rechercher(utilisateur, nom_rdv) == 1) {
             fichier2 = fopen(nom_rdv, "r") ;
@@ -86,10 +91,9 @@ void consulter_Agenda()
                     printf("%c", caractereActuel);
                 } while (caractereActuel != EOF);
             }
-            else printf("non");
             fclose(fichier2) ;
         }
-        else printf("ce rdv n'existe pas !");
+        else printf("\nCe rdv n'existe pas !");
     fclose(fichier1) ;
     }
     else
@@ -122,7 +126,7 @@ int creer_RDV(char utilisateur[50])
     else {
         fclose(fichier);
         fopen(utilisateur, "a");
-        printf("Donnez le nom du fichier :\n");
+        printf("\nDonnez le nom du fichier : ");
         texte(nomRDV);
         fprintf(fichier, strcat(nomRDV,".txt"));
         fprintf(fichier, "\n");
@@ -157,20 +161,20 @@ int modif_RDV()
     FILE *fichier2;
     char rdv[500] = "";
     char utilisateur[50];
-    printf("quel utilisateur etes vous ?: \n");
+    printf("Quel utilisateur etes vous ? : ");
     texte(utilisateur);
     fichier = fopen(strcat(utilisateur,".txt"),"r");
     if (fichier == NULL)
         printf("Vous n'etes pas enregistre en tant qu'utilisateur !");
     else {
-        printf("quel rdv voulez vous modifier? : \n");
+        printf("Quel rdv voulez vous modifier ? : ");
         texte(rdv);
         if (rechercher(utilisateur, rdv) == 0 ) {
-            printf("le rdv n'existe pas");
+            printf("Le rdv n'existe pas !");
         }
         else{
             fichier2 = fopen(rdv, "w+");
-            printf("\nEntrer le nom du rdv : ") ;
+            printf("\nEntrer le motif du rdv : ") ;
             texte(info.motif) ;
             fprintf(fichier2, "motif : %s\n", info.motif) ;
 
@@ -334,3 +338,4 @@ int main()
     }
     return 0;
 }
+
