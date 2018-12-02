@@ -1,0 +1,46 @@
+int modif_RDV()
+{   RDV info;
+    FILE *fichier;
+    FILE *fichier2;
+    char *positionModif = NULL;
+    char rdv[500] = "";
+    char utilisateur[50];
+    char modification[50];
+    printf("quel utilisateur etes vous ?: \n");
+    texte(utilisateur);
+    fichier = fopen(strcat(utilisateur,".txt"),"r");
+    if (fichier == NULL)
+        printf("Vous n'etes pas enregistre en tant qu'utilisateur !");
+    else {
+    printf("quel rdv voulez vous modifier? : \n");
+    texte(rdv);
+  //  if
+       // (rechercher(utilisateur,strcat(rdv,utilisateur))==0)//{
+        //printf("le rdv n'existe pas");
+    //}
+   // else{
+       fichier2 = fopen(strcat(rdv,".txt"),"w+");
+
+       printf("\nEntrer le motif : ") ;
+    texte(info.motif) ;
+    fprintf(fichier2, "motif : %s\n", info.motif) ;
+
+        printf("\nEntrer date : ") ;
+    texte(info.date) ;
+    fprintf(fichier2, "date : %s\n", info.date) ;
+
+        printf("\nEntrer le lieu : ") ;
+    texte(info.lieu) ;
+    fprintf(fichier2, "lieu : %s\n", info.lieu) ;
+
+        printf("\nEntrer l'heure : ") ;
+    texte(info.heure) ;
+    fprintf(fichier2, "Heure : %s\n", info.heure) ;
+
+    fclose(fichier2);
+   // }
+    }
+
+    fclose(fichier);
+
+}
