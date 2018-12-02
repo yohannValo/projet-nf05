@@ -1,0 +1,284 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+
+void viderbuffer()
+{
+    int c = 0 ;
+    while (c != '\n' && c != EOF) {
+            c = getchar() ; }
+}
+
+void texte(char chaine[50])                             //creation de la fonction de demande de texte
+{                                                       //elle prend en parametre une chaine de caractere qui sera remplacee
+    char *positionEntree = NULL ;
+    if (fgets(chaine, 50, stdin) != NULL)
+    {
+        positionEntree = strchr(chaine, '\n') ;
+        if (positionEntree != NULL)
+        {
+            *positionEntree = '\0' ;
+        }
+        else
+        {
+            viderbuffer() ;
+        }
+    }
+    else
+    {
+       viderbuffer() ;
+    }
+}
+
+void consulter_Agenda(char utilisateur[50], char rdv[500])
+{
+    FILE* fichier = NULL ;
+    printf("Quel utilisateur etes-vous ? : ") ;
+    texte(utilisateur) ;
+    fichier = fopen(strcat(utilisateur,".txt"), "r") ;        //fonction strcat() qui ajoute ".txt" a la chaine utilisateur
+
+    if (fichier != NULL)
+    {
+        printf("Voici vos rendez-vous :\n");
+        while ( fgets(rdv, 500, fichier) != NULL ) {
+            printf("%s", rdv) ;
+        }
+        fclose(fichier) ;
+    }
+    else
+    {
+        printf("Vous n'etes pas enregistre en tant qu'utilisateur !\n");
+    }
+}
+
+typedef struct  {
+char motif [50];
+char date [50];
+char lieu[50];
+char heure[50];
+}RDV;
+
+
+
+
+int creer_RDV(char utilisateur[50])                         //la fonction creer rdv prend en parametre une chaine de caractere qui sera
+{                                                           //le nom de l'utilisateur
+
+    RDV info;
+    char nomRDV[20] ;
+    FILE *fichier = NULL;
+    FILE *fichier2 = NULL;
+    printf("Quel utilisateur etes-vous ? : ") ;
+    texte(utilisateur) ;
+    fichier = fopen(strcat(utilisateur,".txt"), "a+");
+    if (fichier == NULL) printf("Vous n'etes pas enregistre en tant qu'utilisateur !");
+    else {
+        printf("donnez un nom a votre rendez vous par son motif :\n");
+        texte(nomRDV);
+        fprintf(fichier,strcat(nomRDV,".txt"));
+    fclose(fichier);
+    fichier2 = fopen(strcat(nomRDV,".txt"), "w+");
+
+        printf("\nEntrer le motif : ") ;
+    texte(info.motif) ;
+    fprintf(fichier, "motif : %s\n", info.motif) ;
+
+
+
+        printf("\nEntrer date : ") ;
+    texte(info.date) ;
+    fprintf(fichier, "date : %s\n", info.date) ;
+
+
+
+        printf("\nEntrer le lieu : ") ;
+    texte(info.lieu) ;
+    fprintf(fichier, "lieu : %s\n", info.lieu) ;
+
+
+
+        printf("\nEntrer l'heure : ") ;
+    texte(info.heure) ;
+    fprintf(fichier, "Heure : %s\n", info.heure) ;
+
+       fclose(fichier2);                              //c'est pour cela que les fonctions entrer motif, date , lieu et heure
+    }                                                       //sont crees avec un chaine de caractere en parametre
+    return 0 ;                                                  //ATTENTION ces variables sont locales, meme si elles portent le meme nom
+}                                                               //les variables nom_fichier d'une fonction a l'autre peuvent etre diffentes
+
+int modif_RDV()
+{
+    FILE *fichier;
+    char *positionModif = NULL;
+    char rdv[500] = "";
+    char utilisateur[50];
+    char modification[50];
+    consulter_Agenda(utilisateur, rdv);
+    printf("Entrer le motif du rendez-vous que vous voulez modifier : ");
+    texte(modification);
+    fichier = fopen(utilisateur, "r+");
+    if (fichier != NULL) {
+        positionModif = strstr(rdv, modification) ;
+        if (positionModif != NULL)
+        {
+            printf("trouve !") ;
+        }
+        else printf("Echec");
+    }
+    return 0 ;
+}
+
+int ajout_Util()
+{
+    FILE *fichier = NULL ;
+    char utilisateur[50] ;
+    printf("Entrer le nom de l'utilisateur : ");
+    texte(utilisateur);
+    fichier = fopen(strcat(utilisateur,".txt"), "w") ;
+    if (fichier != NULL) {
+        fprintf(fichier, "Fichier utilisateur : %s\n", utilisateur) ;
+    }
+    fclose(fichier);
+
+    return 0 ;
+}
+
+int modif_Util()
+{
+    FILE *fichier = NULL ;
+    char utilisateur1[50];
+    char utilisateur2[50];
+    printf("Entrer le nom de l'utilisateur a modifier : ");
+    texte(utilisateur1);
+    printf("Entrer le nom du nouvel utilisateur : ");
+    texte(utilisateur2);
+
+    fichier = fopen(strcat(utilisateur1, ".txt"), "r") ;
+    if (fichier == NULL) printf("L'utilisateur a modifier n'est pas enregistre !");
+    else fclose(fichier);
+    if (rename(utilisateur1, strcat(utilisateur2,".txt")) == 0) printf("Fichier renomme avec succes");
+    else printf("Echec lors du renommage du fichier");
+
+    return 0 ;
+}
+
+int suppr_Util()
+{
+    FILE *fichier;
+    char utilisateur[50];
+    printf("Quel utilisateur voulez-vous supprimer ? : ");
+    texte(utilisateur);
+    fichier = fopen(strcat(utilisateur,".txt"), "r");
+    if (fichier != NULL) {
+        fclose(fichier);
+        remove(utilisateur);
+        printf("Utilisateur supprime avec succes !\n");
+    }
+    else printf("Cet utilisateur n'etait pas enregistre");
+
+    return 0 ;
+}
+
+int ajout_JourSpe()
+{
+    char jour[50];
+    return 0 ;
+}
+
+int modif_JourSpe()
+{
+    return 0 ;
+}
+
+int suppr_JourSpe()
+{
+    return 0 ;
+}
+
+int affichage_Jour()
+{
+    return 0 ;
+}
+
+int affichage_Semaine()
+{
+    return 0 ;
+}
+
+int affichage_Mois()
+{
+    return 0 ;
+}
+
+int utilisateur()
+{
+    int choix ;
+    char utilisateur[50] ;
+    char rdv[500] = "";
+    printf("\nConsulter l'agenda = 1 ** Creer un RDV = 2 ** Modifier un RDV = 3 \n") ;
+    scanf("%d", &choix) ;
+    viderbuffer() ;
+    switch(choix)
+    {case 1 : consulter_Agenda(utilisateur, rdv) ; break ;
+     case 2 : creer_RDV(utilisateur) ; break ;
+     case 3 : modif_RDV() ; break ;
+     default : while (choix != 1 && choix != 2 && choix != 3 && choix != 4) {
+        printf("Veuillez saisir 1, 2, 3 ou 4 :") ;
+        scanf("%d", &choix) ; } }
+
+ return 0 ;
+}
+
+int administrateur()
+{
+int choix ;
+
+    printf("\nAjouter un utilisateur =..........1\nModifier un utilisateur =.........2\nSupprimer un utilisateur =........3\n") ;
+    printf("Ajouter une journee speciale =....4\nModifier une journee speciale =...5\nSupprimer une journee speciale =..6\n") ;
+    printf("Affichage par jour =..............7\nAffichage par semaine =...........8\nAffichage par mois =..............9\n") ;
+    scanf("%d", &choix) ;
+    viderbuffer() ;
+    switch(choix)
+    {case 1 : ajout_Util() ; break ;
+     case 2 : modif_Util() ; break ;
+     case 3 : suppr_Util() ; break ;
+     case 4 : ajout_JourSpe() ; break ;
+     case 5 : modif_JourSpe() ; break ;
+     case 6 : suppr_JourSpe() ; break ;
+     case 7 : affichage_Jour() ; break ;
+     case 8 : affichage_Semaine() ; break ;
+     case 9 : affichage_Mois() ; break ;
+     default : while (choix != 1 && choix != 2 && choix != 3 && choix != 4 && choix != 5 && choix != 6 && choix != 7 && choix != 8 && choix != 9) {
+        printf("Veuillez saisir 1, 2, 3, 4, 5, 6, 7, 8 ou 9 :") ;
+        scanf("%d", &choix) ; } }
+
+  return 0 ;
+}
+
+
+
+int main()
+{
+    int choix ;
+    char stop = 0 ;
+
+    printf("\t\t\t\t\tBienvenue dans votre agenda virtuel !\n") ;
+    while (stop != 33 ) {
+        printf("\nChoisissez le mode : Utilisateur = 1 ****** Administrateur = 2\n") ;
+        scanf("%d", &choix) ;
+        viderbuffer() ;
+        while (choix != 1 && choix != 2) {
+            printf("Veuillez saisir 1 ou 2 :") ;
+            scanf("%d", &choix) ;
+            viderbuffer() ;
+        }
+        if (choix == 1) utilisateur() ;
+        else administrateur() ;
+        printf("\nTaper ! pour quitter / Autre pour continuer : ") ;
+        scanf("%c", &stop) ;
+    }
+
+    return 0;
+}
